@@ -5,7 +5,6 @@ import os
 from dotenv import load_dotenv
 
 
-
 def closePosition(client, symbol, ammount):
     if ammount < 0:
         ammount = -1 * ammount
@@ -105,13 +104,11 @@ while(True):
                     unrealized_profits_for_long_position = position['unrealizedProfit']
                     long_position_amount = position['positionAmt']
                     break
-            
             for position in future_account['positions']:
                 if(position['symbol'] == row[1]):
                     unrealized_profits_for_short_position = position['unrealizedProfit']
                     short_position_amount = position['positionAmt']
                     break
-            
             # now lets convert the unrealized profits into a float
             # then check if the results is greater or equal to the expected profit specefied in the configs
             unrealized_profits_for_long_position = float(unrealized_profits_for_long_position)

@@ -1,0 +1,19 @@
+this list contains coins that actually work with the barato strategy
+
+BTCUSDT // ma boi
+ETHUSDT // ma boi falls hard and comes back stronger so this one should be set in the trend direction
+DOTUSDT
+MATICUSDT ?? this can be dangerous since it is effected by other things
+ADAUSDT ?? this is a sleepy beauty most of the time take it as a long position
+LTCUSDT // good soup just follow the trend and you should be okay
+BCHUSDT // this is good soup since its just calm BTCUSDT
+ETCUSDT // this is another beauty
+XMRUSDT // this is a bit sussy since it can act different to BTCUSDT or move a bit slower so check your things first no big sizes with this
+XLMUSDT // I should check this a bit more and see whats this all about but it do be looking like a kind boi
+
+if you use those u can have 3 pairs at a time which means if your target is 1% of your account 
+you may get 3% a day 
+using the compound effect thats a 2.4X a month and every one knows 2.4X amonth ma boi is redicuulass 
+37157.9713X a year using the compound effect but don't get greddy try to study the trends always one bad position and a month of work is out
+
+['BTCUSDT', 'ETHUSDT', 'DOTUSDT', 'MATICUSDT', 'ADAUSDT', 'LTCUSDT', 'BCHUSDT', 'ETCUSDT', 'XMRUSDT', 'XLMUSDT']
