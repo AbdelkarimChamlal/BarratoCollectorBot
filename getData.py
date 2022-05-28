@@ -84,57 +84,60 @@ if(operation == 'a'):
     
 
 while(True):
-    # get all pairs from database where status is open
-    cur.execute('''SELECT * FROM pairs WHERE status = ?''', ('open',))
-    future_account = client.futures_account()
-    
-    
-    # loop over all pairs from database
-    for row in cur.fetchall():
-        # display start of a new pair
-
-        unrealized_profits_for_long_position = None
-        long_position_amount = None
-        unrealized_profits_for_short_position = None
-        short_position_amount = None
-
-        # maybe bad choice but I rather use the CPU than send a request to the api.
-        for position in future_account['positions']:
-            if(position['symbol'] == row[0]):
-                unrealized_profits_for_long_position = position['unrealizedProfit']
-                long_position_amount = position['positionAmt']
-                break
+    try:
+        # get all pairs from database where status is open
+        cur.execute('''SELECT * FROM pairs WHERE status = ?''', ('open',))
+        future_account = client.futures_account()
         
-        for position in future_account['positions']:
-            if(position['symbol'] == row[1]):
-                unrealized_profits_for_short_position = position['unrealizedProfit']
-                short_position_amount = position['positionAmt']
-                break
         
-        # now lets convert the unrealized profits into a float
-        # then check if the results is greater or equal to the expected profit specefied in the configs
-        unrealized_profits_for_long_position = float(unrealized_profits_for_long_position)
-        unrealized_profits_for_short_position = float(unrealized_profits_for_short_position)
+        # loop over all pairs from database
+        for row in cur.fetchall():
+            # display start of a new pair
 
-        # then add them together 
-        unrealized_profits = unrealized_profits_for_long_position + unrealized_profits_for_short_position
-        
-        # display the pair long and short position
-        print('long position: ', row[0], ' amount: ', long_position_amount, ' unrealized profit: ', unrealized_profits_for_long_position)
-        print('short position: ', row[1], ' amount: ', short_position_amount, ' unrealized profit: ', unrealized_profits_for_short_position)
-       
-        # devide them by the amount of the position
-        unrealized_profits = unrealized_profits / float(row[2])
-        
-        # check if the result is greater or equal to the expected profit
-        if(unrealized_profits >= expected_profit_percent):
-            # close long and short positions and update the status in the database
-            closePosition(client, row[0], long_position_amount)
-            closePosition(client, row[1], short_position_amount)
-            cur.execute('''UPDATE pairs SET status = ?, profit = ? WHERE long = ? AND short = ?''', ('closed', unrealized_profits, row[0], row[1]))
-            con.commit()
+            unrealized_profits_for_long_position = None
+            long_position_amount = None
+            unrealized_profits_for_short_position = None
+            short_position_amount = None
 
-            print('position closed')
+            # maybe bad choice but I rather use the CPU than send a request to the api.
+            for position in future_account['positions']:
+                if(position['symbol'] == row[0]):
+                    unrealized_profits_for_long_position = position['unrealizedProfit']
+                    long_position_amount = position['positionAmt']
+                    break
+            
+            for position in future_account['positions']:
+                if(position['symbol'] == row[1]):
+                    unrealized_profits_for_short_position = position['unrealizedProfit']
+                    short_position_amount = position['positionAmt']
+                    break
+            
+            # now lets convert the unrealized profits into a float
+            # then check if the results is greater or equal to the expected profit specefied in the configs
+            unrealized_profits_for_long_position = float(unrealized_profits_for_long_position)
+            unrealized_profits_for_short_position = float(unrealized_profits_for_short_position)
+
+            # then add them together 
+            unrealized_profits = unrealized_profits_for_long_position + unrealized_profits_for_short_position
+            
+            # display the pair long and short position
+            print('long position: ', row[0], ' amount: ', long_position_amount, ' unrealized profit: ', unrealized_profits_for_long_position)
+            print('short position: ', row[1], ' amount: ', short_position_amount, ' unrealized profit: ', unrealized_profits_for_short_position)
+        
+            # devide them by the amount of the position
+            unrealized_profits = unrealized_profits / float(row[2])
+            
+            # check if the result is greater or equal to the expected profit
+            if(unrealized_profits >= expected_profit_percent):
+                # close long and short positions and update the status in the database
+                closePosition(client, row[0], long_position_amount)
+                closePosition(client, row[1], short_position_amount)
+                cur.execute('''UPDATE pairs SET status = ?, profit = ? WHERE long = ? AND short = ?''', ('closed', unrealized_profits, row[0], row[1]))
+                con.commit()
+
+                print('position closed')
+    except:
+        print('error')
     sleep(300) # sleep for five minutes so binance doesn't get angry at me because am being abusive a lot
         
 
