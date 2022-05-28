@@ -22,7 +22,7 @@ binance_api_secret = os.getenv('BINANCE_API_SECRET')
 client = Client(binance_api_key, binance_api_secret)
 info = client.futures_exchange_info()
 
-con = sqlite3.connect('sqlite.db')
+con = sqlite3.connect(os.getenv('SQL_LITE_NAME'))
 
 # create a table inside the database
 cur = con.cursor()
